@@ -216,7 +216,7 @@ resource "local_file" "configure_ansible_cfg" {
       host_key_checking=False
       inventory=./inventory
       remote_user=ec2-user
-      private_key_file=./../../keys/id_rsa
+      private_key_file=../keys/id_rsa
       ask_pass=false
       deprecation_warnings=False
 
