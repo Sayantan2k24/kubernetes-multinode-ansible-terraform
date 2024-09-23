@@ -129,7 +129,7 @@ resource "aws_key_pair" "server-key" {
 # Create ec2 instance for k8s master node with the ssh key
 resource "aws_instance" "k8s_master" {
   ami                    = "ami-05a5bb48beb785bf1"
-  instance_type          = "t2.micro"
+  instance_type          = "t2.medium"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.secure-sg.id]
   key_name               = aws_key_pair.server-key.key_name
@@ -150,7 +150,7 @@ resource "aws_instance" "k8s_master" {
 resource "aws_instance" "k8s_slaves" {
   count                  = 2
   ami                    = "ami-05a5bb48beb785bf1"
-  instance_type          = "t2.micro"
+  instance_type          = "t2.medium"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.secure-sg.id]
   key_name               = aws_key_pair.server-key.key_name
