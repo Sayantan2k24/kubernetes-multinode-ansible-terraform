@@ -1,5 +1,5 @@
 - name: For K8s Master Node Configuration Only
-  hosts: k8s-master
+  hosts: k8s_master
   become: true
   tasks:
   - name: Define the Maste Node Private IP on the shell
@@ -54,7 +54,7 @@
     local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"
 
 - name: In the slave nodes
-  hosts: k8s-slaves
+  hosts: k8s_slaves
   become: true
   tasks:
   - name: Copy the join command to server location
