@@ -123,7 +123,7 @@ resource "aws_security_group" "secure-sg" {
 # create ssh key in AWS
 resource "aws_key_pair" "server-key" {
   key_name   = "boardgame-servers-key"
-  public_key = file("./../../keys/id_rsa.pub")
+  public_key = file("../keys/id_rsa.pub")
 }
 
 # Create ec2 instance for k8s master node with the ssh key
