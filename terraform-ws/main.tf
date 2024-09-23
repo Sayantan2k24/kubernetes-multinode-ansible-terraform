@@ -122,7 +122,7 @@ resource "aws_security_group" "secure-sg" {
 
 # create ssh key in AWS
 resource "aws_key_pair" "server-key" {
-  key_name   = "boardgame-servers-key"
+  key_name   = "k8s-server-key"
   public_key = file("../keys/id_rsa.pub")
 }
 
