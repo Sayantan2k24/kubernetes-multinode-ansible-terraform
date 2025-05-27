@@ -242,13 +242,30 @@ resource "local_file" "configure_ansible_cfg" {
 }
 
 
+# Verify Ansible SSH connectivity using ping module
+resource "null_resource" "verify_ansible_connectivity" {
+  depends_on = [
+    aws_instance.k8s_master,
+    aws_instance.k8s_slaves,
+    local_file.inventory_creation,
+    local_file.configure_ansible_cfg
+  ]
+
+  provisioner "local-exec" {
+    working_dir = "../ansible-ws/"
+    command     = "ansible all -m ping"
+  }
+}
+
+
 # Trigger ansible to run rhel_common.yml
 resource "null_resource" "trigger_ansible_playbook_common" {
   depends_on = [
     aws_instance.k8s_master,
     aws_instance.k8s_slaves,
     local_file.inventory_creation,
-    local_file.configure_ansible_cfg
+    local_file.configure_ansible_cfg,
+    null_resource.verify_ansible_connectivity
   ]
 
   provisioner "local-exec" {
@@ -264,7 +281,8 @@ resource "null_resource" "trigger_ansible_playbook_master" {
     aws_instance.k8s_slaves,
     local_file.inventory_creation,
     local_file.configure_ansible_cfg,
-    null_resource.trigger_ansible_playbook_common
+    null_resource.trigger_ansible_playbook_common,
+    null_resource.verify_ansible_connectivity
   ]
 
   provisioner "local-exec" {
