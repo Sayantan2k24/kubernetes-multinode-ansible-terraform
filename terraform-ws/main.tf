@@ -242,13 +242,22 @@ resource "local_file" "configure_ansible_cfg" {
 }
 
 
+# Set correct permissions on private key
+resource "null_resource" "set_private_key_permissions" {
+  provisioner "local-exec" {
+    command = "chmod 400 ../keys/id_rsa"
+  }
+}
+
+
 # Verify Ansible SSH connectivity using ping module
 resource "null_resource" "verify_ansible_connectivity" {
   depends_on = [
     aws_instance.k8s_master,
     aws_instance.k8s_slaves,
     local_file.inventory_creation,
-    local_file.configure_ansible_cfg
+    local_file.configure_ansible_cfg,
+    null_resource.set_private_key_permissions
   ]
 
   provisioner "local-exec" {
