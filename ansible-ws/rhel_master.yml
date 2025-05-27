@@ -46,6 +46,12 @@
     shell: hostname -s
     register: hostname_output
 
+  - name: Check if Kubernetes is already initialized
+    shell: kubectl get nodes --no-headers
+    register: k8s_cluster_status
+    failed_when: false
+    changed_when: false
+
   - name: Initialize Kubernetes Cluster
     shell: |
       kubeadm init \
@@ -54,16 +60,19 @@
         --pod-network-cidr="{{ pod_cidr }}" \
         --node-name="{{ hostname_output.stdout }}" \
         --ignore-preflight-errors Swap
+    when: k8s_cluster_status.rc != 0    
     register: kubeinit_details
 
   - name: Output kubeadm init result
     debug:
       var: kubeinit_details
+    when: k8s_cluster_status.rc != 0
 
   - name: Create .kube directory
     file:
       path: "{{ ansible_env.HOME }}/.kube"
       state: directory
+    when: k8s_cluster_status.rc != 0
 
   - name: Copy kube config to .kube directory
     copy:
@@ -71,31 +80,35 @@
       dest: "{{ ansible_env.HOME }}/.kube/config"
       remote_src: yes
       mode: '0644'
+    when: k8s_cluster_status.rc != 0  
 
   - name: Set ownership of .kube/config
     file:
       path: "{{ ansible_env.HOME }}/.kube/config"
       owner: "{{ ansible_user_id }}"
       group: "{{ ansible_user_gid }}"
-
+    when: k8s_cluster_status.rc != 0
 
   - name: Copy calico.yaml to /tmp/ folder to master node
     copy:
       src: "../calico.yaml"
       dest: "/tmp/calico.yaml"
-
+    when: k8s_cluster_status.rc != 0
 
   - name: Apply Calico CNI
     shell: kubectl apply -f /tmp/calico.yaml
-
+    when: k8s_cluster_status.rc != 0
     # shell: kubectl apply -f https://raw.githubusercontent.com/Sayantan2k24/kubernetes-multinode-ansible-aws/main/calico.yaml
 
   - name: Generate kubeadm join command
     command: kubeadm token create --print-join-command
     register: join_command
+    when: k8s_cluster_status.rc != 0
 
   - name: Save join command to local file
     local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"
+    when: k8s_cluster_status.rc != 0
+
 
 - name: In the worker Node
   hosts: slaves
