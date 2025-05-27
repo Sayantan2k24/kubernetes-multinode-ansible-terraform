@@ -192,10 +192,10 @@ resource "local_file" "inventory_creation" {
 
   # Write the ansible inventory to a file
 #   content  = <<-EOF
-#       [k8s_master]
+#       [master]
 #       ${aws_instance.k8s_master.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
 
-#       [k8s_slaves]
+#       [slaves]
 #       ${aws_instance.k8s_slaves[0].public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
 #       ${aws_instance.k8s_slaves[1].public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
 #   EOF
