@@ -247,10 +247,10 @@ resource "local_file" "inventory_creation" {
 #   filename = "../ansible-ws/inventory"
 
   content = <<-EOF
-      [master]
-      ${aws_instance.k8s_master.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
+[master]
+${aws_instance.k8s_master.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
 
-      [slaves]
+[slaves]
 %{ for slave in aws_instance.k8s_slaves[*] ~}
 ${slave.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
 %{ endfor }
@@ -295,6 +295,29 @@ resource "null_resource" "set_private_key_permissions" {
 }
 
 
+
+# wait for some time so that sshd service get active in the instances/servers
+resource "null_resource" "trigger_ansible_after_sleep" {
+  depends_on = [
+    aws_instance.k8s_master,
+    aws_instance.k8s_slaves,
+    local_file.inventory_creation,
+    local_file.configure_ansible_cfg,
+    null_resource.set_private_key_permissions
+   ]
+
+  provisioner "local-exec" {
+    working_dir = "../ansible-ws"
+    command     = <<EOT
+      echo "Waiting 60 seconds for SSH to be ready..."
+      sleep 60
+    EOT
+  }
+}
+
+
+
+
 # Verify Ansible SSH connectivity using ping module
 resource "null_resource" "verify_ansible_connectivity" {
   depends_on = [
@@ -302,7 +325,8 @@ resource "null_resource" "verify_ansible_connectivity" {
     aws_instance.k8s_slaves,
     local_file.inventory_creation,
     local_file.configure_ansible_cfg,
-    null_resource.set_private_key_permissions
+    null_resource.set_private_key_permissions,
+    null_resource.trigger_ansible_after_sleep
   ]
 
   provisioner "local-exec" {
@@ -344,7 +368,6 @@ resource "null_resource" "trigger_ansible_playbook_master" {
     command     = "ansible-playbook rhel_master.yml"
   }
 }
-
 
 
 
