@@ -22,10 +22,16 @@
       dnf:
         name: "{{ packages }}"
         state: present
-
+      
+    # - name: Load kernel modules
+    #   modprobe:
+    #     name: "{{ item }}"
+    #   loop:
+    #     - overlay
+    #     - br_netfilter
+    
     - name: Load kernel modules
-      modprobe:
-        name: "{{ item }}"
+      shell: modprobe {{ item }}
       loop:
         - overlay
         - br_netfilter
