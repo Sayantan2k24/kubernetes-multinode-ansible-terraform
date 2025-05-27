@@ -108,50 +108,50 @@ resource "aws_security_group" "secure-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-# BGP
-ingress {
-  description = "Calico BGP"
-  from_port   = 179
-  to_port     = 179
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-}
-
-# VXLAN
-ingress {
-  description = "Calico VXLAN"
-  from_port   = 4789
-  to_port     = 4789
-  protocol    = "udp"
-  cidr_blocks = ["0.0.0.0/0"]
-}
-
-# IP-in-IP
-ingress {
-  description = "Calico IP-in-IP"
-  from_port   = 0
-  to_port     = 0
-  protocol    = "4"
-  cidr_blocks = ["0.0.0.0/0"]
-}
-
-# Kubelet communication
-ingress {
-  description = "Kubelet API"
-  from_port   = 10250
-  to_port     = 10250
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-}
-
-# Typha (optional)
-ingress {
-  description = "Calico Typha"
-  from_port   = 5473
-  to_port     = 5473
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-}
+  # BGP
+  ingress {
+    description = "Calico BGP"
+    from_port   = 179
+    to_port     = 179
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # VXLAN
+  ingress {
+    description = "Calico VXLAN"
+    from_port   = 4789
+    to_port     = 4789
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # IP-in-IP
+  ingress {
+    description = "Calico IP-in-IP"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "4"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # Kubelet communication
+  ingress {
+    description = "Kubelet API"
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # Typha (optional)
+  ingress {
+    description = "Calico Typha"
+    from_port   = 5473
+    to_port     = 5473
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
