@@ -81,7 +81,7 @@
 
   - name: Copy calico.yaml to /tmp/ folder to master node
     copy:
-      src: "calico.yaml"
+      src: "../calico.yaml"
       dest: "/tmp/calico.yaml"
 
 
