@@ -1,5 +1,5 @@
 - name: For K8s Master Node Configuration Only
-  hosts: k8s-master
+  hosts: master
   become: true
   vars:
     use_public_ip: false
@@ -98,7 +98,7 @@
     local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"
 
 - name: In the worker Node
-  hosts: k8s-slaves
+  hosts: slaves
   become: true
   tasks:
   - name: Copy join command to worker
