@@ -202,13 +202,13 @@ resource "local_file" "inventory_creation" {
 #   filename = "../ansible-ws/inventory"
 
   content = <<-EOF
-      [k8s-master]
+      [master]
       ${aws_instance.k8s_master.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
 
-      [k8s-slaves]
-      %{ for slave in aws_instance.k8s_slaves[*] ~}
-      ${slave.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
-      %{ endfor }
+      [slaves]
+%{ for slave in aws_instance.k8s_slaves[*] ~}
+${slave.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=../keys/id_rsa
+%{ endfor }
   EOF
 
   filename = "../ansible-ws/inventory"
