@@ -26,7 +26,7 @@ and more..
    - Creates a default subnet in the first availability zone with a tag indicating its availability zone.
 
 3. **Security Group Setup:**
-   - Creates a security group named "secure-sg" with various ingress and egress rules for different services like SMTP, HTTP, HTTPS, SSH, Kubernetes API server, NodePort services, and ICMP.
+   - Creates a security group named "secure-sg" with various ingress and egress rules for different services like SMTP, HTTP, HTTPS, SSH, Kubernetes API server, NodePort services, and ICMP, calico BGP, calico VXLAN, IP-in-IP, Typha.
    - Attaches the security group to instances later in the configuration.
 
 4. **SSH Key Pair Setup:**
