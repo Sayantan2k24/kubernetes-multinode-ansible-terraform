@@ -30,7 +30,7 @@ and more..
    - Attaches the security group to instances later in the configuration.
 
 4. **SSH Key Pair Setup:**
-   - Creates an SSH key pair named "boardgame-servers-key" to be used for accessing EC2 instances.
+   - Creates an SSH key pair named "id_rsa" to be used for accessing EC2 instances.
 
 5. **EC2 Instance Setup - Kubernetes Master:**
    - Launches an EC2 instance for the Kubernetes master node.
